@@ -1,0 +1,28 @@
+platform :ios, '12.0'
+
+flutter_application_path = '../'
+
+target 'Runner' do
+  use_frameworks!
+  use_modular_headers!
+
+  flutter_path = '../.symlinks/flutter/ios'
+  if File.exist?(flutter_path)
+    Dir.glob(File.join(flutter_path, '*.podspec')).each do |podspec|
+      pod podspec, :path => File.dirname(podspec)
+    end
+  end
+
+  pod 'webview_flutter', :path => '../.symlinks/plugins/webview_flutter/ios'
+  pod 'shared_preferences', :path => '../.symlinks/plugins/shared_preferences/ios'
+  pod 'http', :path => '../.symlinks/plugins/http/ios'
+  pod 'video_player', :path => '../.symlinks/plugins/video_player/ios'
+end
+
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    target.build_configurations.each do |config|
+      config.build_settings['IPHONEOS_DEPLOYMENT_TARGET'] = '12.0'
+    end
+  end
+end
