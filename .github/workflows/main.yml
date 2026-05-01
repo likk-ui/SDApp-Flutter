@@ -19,19 +19,27 @@ jobs:
     
     - name: Initialize Flutter project
       run: |
-        flutter create --platforms=ios .
+        flutter create --platforms=ios --org=com.grating sd_app
+        cd sd_app
+        cp -r ../lib ./lib/
+        cp ../pubspec.yaml ./
+        cp -r ../ios ./
+        cp -r ../assets ./
+        cp ../README.md ./
     
     - name: Install dependencies
       run: |
+        cd sd_app
         flutter pub get
         cd ios && pod install && cd ..
     
     - name: Build iOS
       run: |
+        cd sd_app
         flutter build ios --release --no-codesign
     
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
         name: ios-ipa
-        path: build/ios/ipa/Runner.ipa
+        path: sd_app/build/ios/ipa/Runner.ipa
