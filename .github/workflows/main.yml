@@ -17,9 +17,14 @@ jobs:
       with:
         flutter-version: '3.24.0'
     
+    - name: Initialize Flutter project
+      run: |
+        flutter create --platforms=ios .
+    
     - name: Install dependencies
       run: |
         flutter pub get
+        cd ios && pod install && cd ..
     
     - name: Build iOS
       run: |
